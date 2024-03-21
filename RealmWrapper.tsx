@@ -1,9 +1,12 @@
 import { RealmProvider, useApp } from "@realm/react";
 import { ActivityIndicator, SafeAreaView } from "react-native";
-import { OpenRealmBehaviorType } from "realm";
+import { Realm, OpenRealmBehaviorType } from "realm";
 import App from "./App";
 import { useEffect, useState } from "react";
 import { Task } from "./models/Task";
+import "react-native-get-random-values";
+
+Realm.flags.THROW_ON_GLOBAL_REALM = true;
 
 function RealmWrapper(): JSX.Element {
   const app = useApp();
