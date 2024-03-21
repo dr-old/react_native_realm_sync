@@ -4,7 +4,6 @@ import RealmWrapper from "./RealmWrapper";
 
 function AppWrapper(): JSX.Element {
   return (
-    // IMPORTANT: ADD YOUR APP ID BELOW
     <AppProvider id={"devicesync-dehqp"}>
       <UserProvider fallback={<RealmWrapper />}>
         <RealmWrapper />

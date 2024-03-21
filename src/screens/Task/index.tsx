@@ -6,27 +6,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Task } from "./models/Task";
+
 import { Realm, BSON } from "realm";
 import { useQuery, useRealm } from "@realm/react";
+import { Task } from "../../../models/Task";
+import NavigationService from "../../helper/NavigationService";
 
 const showToast = (message: string) => {
   ToastAndroid.show(message, ToastAndroid.SHORT);
 };
 
-function App(): JSX.Element {
+function TaskScreen(): JSX.Element {
   const realm = useRealm();
   const tasks = useQuery(Task);
-
-  const addTask = useCallback(() => {
-    realm.write(() => {
-      realm.create("Task", {
-        _id: new BSON.ObjectId(),
-        title: "Walk the dog",
-        description: "Bring an umbrella",
-      });
-    });
-  }, [realm]);
 
   const deleteTask = useCallback(
     (taskId: BSON.ObjectId) => {
@@ -143,10 +135,8 @@ function App(): JSX.Element {
                   alignItems: "center",
                 }}
                 onPress={() =>
-                  updateTask(item._id, {
-                    title: "Updated",
-                    description:
-                      "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                  NavigationService.push("TaskUpdateScreen", {
+                    itemId: item._id?.toHexString(),
                   })
                 }>
                 <Text style={{ color: "#fff", fontWeight: "700" }}>Edit</Text>
@@ -164,7 +154,7 @@ function App(): JSX.Element {
           marginVertical: 20,
           marginHorizontal: 20,
         }}
-        onPress={addTask}>
+        onPress={() => NavigationService.push("TaskCreateScreen")}>
         <Text
           style={{
             color: "#fff",
@@ -179,4 +169,4 @@ function App(): JSX.Element {
   );
 }
 
-export default App;
+export default TaskScreen;
