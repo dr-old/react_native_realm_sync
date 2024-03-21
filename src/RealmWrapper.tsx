@@ -1,6 +1,6 @@
 import { RealmProvider, useApp } from "@realm/react";
 import { ActivityIndicator, SafeAreaView } from "react-native";
-import { Realm, OpenRealmBehaviorType } from "realm";
+import { Realm } from "realm";
 import App from "./App";
 import { useEffect, useState } from "react";
 import { Task } from "../models/Task";
@@ -11,6 +11,9 @@ Realm.flags.THROW_ON_GLOBAL_REALM = true;
 function RealmWrapper(): JSX.Element {
   const app = useApp();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const realmAccessBehavior: Realm.OpenRealmBehaviorConfiguration = {
+    type: Realm.OpenRealmBehaviorType.OpenImmediately,
+  };
 
   useEffect(() => {
     const login = async () => {
@@ -28,15 +31,16 @@ function RealmWrapper(): JSX.Element {
           schema={[Task]}
           sync={{
             flexible: true,
-            newRealmFileBehavior: {
-              type: OpenRealmBehaviorType.DownloadBeforeOpen,
-            },
-            existingRealmFileBehavior: {
-              type: OpenRealmBehaviorType.OpenImmediately,
-            },
+            newRealmFileBehavior: realmAccessBehavior,
+            existingRealmFileBehavior: realmAccessBehavior,
+            // newRealmFileBehavior: {
+            //   type: OpenRealmBehaviorType.DownloadBeforeOpen,
+            // },
+            // existingRealmFileBehavior: {
+            //   type: OpenRealmBehaviorType.OpenImmediately,
+            // },
             onError: (session, error) => {
-              // Replace this with a preferred logger in production.
-              console.error(error.message);
+              console.error("error:", error.message);
             },
           }}>
           <App />

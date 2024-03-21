@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import {
+  Alert,
   FlatList,
   Text,
   ToastAndroid,
@@ -7,7 +8,7 @@ import {
   View,
 } from "react-native";
 
-import { Realm, BSON } from "realm";
+import { BSON } from "realm";
 import { useQuery, useRealm } from "@realm/react";
 import { Task } from "../../../models/Task";
 import NavigationService from "../../helper/NavigationService";
@@ -38,27 +39,15 @@ function TaskScreen(): JSX.Element {
     [realm]
   );
 
-  const updateTask = useCallback(
-    (taskId: BSON.ObjectId, updatedTask: Partial<Task>) => {
-      realm.write(() => {
-        try {
-          const taskToUpdate = realm
-            .objects<Task>("Task")
-            .find((task) => task._id.equals(taskId));
-
-          realm.create(
-            "Task",
-            { ...taskToUpdate, ...updatedTask },
-            Realm.UpdateMode.Modified
-          );
-          showToast("Task updated successfully");
-        } catch (error: any) {
-          showToast("Failed to updated task: " + error?.message);
-        }
-      });
-    },
-    [realm]
-  );
+  const deleteAlert = (taskId: BSON.ObjectId) =>
+    Alert.alert("Attention", "Are you sure you want to delete this data?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "Delete", onPress: () => deleteTask(taskId) },
+    ]);
 
   useEffect(() => {
     realm.subscriptions.update((mutableSubs) => {
@@ -123,7 +112,7 @@ function TaskScreen(): JSX.Element {
                   marginBottom: 5,
                   alignItems: "center",
                 }}
-                onPress={() => deleteTask(item._id)}>
+                onPress={() => deleteAlert(item._id)}>
                 <Text style={{ color: "#fff", fontWeight: "700" }}>Delete</Text>
               </TouchableOpacity>
               <TouchableOpacity
