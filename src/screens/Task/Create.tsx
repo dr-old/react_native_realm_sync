@@ -27,6 +27,9 @@ function TaskCreateScreen(): JSX.Element {
             _id: new BSON.ObjectId(),
             title: data.title,
             description: data.description,
+            isComplete: false,
+            createdAt: new Date(),
+            userId: "danni",
           });
         });
         showToast("Task created successfully");
