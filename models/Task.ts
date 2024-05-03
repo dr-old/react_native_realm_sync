@@ -21,11 +21,13 @@
 // });
 
 import Realm, { BSON } from "realm";
-
 export class Task extends Realm.Object<Task> {
   _id!: BSON.ObjectId;
   title!: string;
   description!: string;
+  isComplete: boolean = false;
+  createdAt: Date = new Date();
+  userId!: string;
 
   static schema: Realm.ObjectSchema = {
     name: "Task",
@@ -34,6 +36,9 @@ export class Task extends Realm.Object<Task> {
       _id: { type: "objectId", default: () => new BSON.ObjectId() },
       title: "string",
       description: "string",
+      isComplete: { type: "bool", default: false }, // If you want to keep the old property
+      createdAt: "date",
+      userId: "string",
     },
   };
 }

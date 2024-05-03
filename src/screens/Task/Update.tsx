@@ -53,6 +53,8 @@ function TaskUpdateScreen({ route }: any): JSX.Element {
           .objects<Task>("Task")
           .find((task) => task._id.equals(objectId));
         if (taskToItem) {
+          console.log("taskToItem", taskToItem);
+
           setFormData({
             title: taskToItem?.title,
             description: taskToItem?.description,

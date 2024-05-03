@@ -12,17 +12,14 @@ import { BSON } from "realm";
 import { useQuery, useRealm } from "@realm/react";
 import { Task } from "../../../models/Task";
 import NavigationService from "../../helper/NavigationService";
-import { OfflineModeButton } from "../../components/OfflineModeButton";
-import { useSyncConnection } from "../../hooks/useSyncConnection";
 
 const showToast = (message: string) => {
   ToastAndroid.show(message, ToastAndroid.SHORT);
 };
 
-function TaskScreen(): JSX.Element {
+function TaskScreens(): JSX.Element {
   const realm = useRealm();
   const tasks = useQuery(Task);
-  const { isConnected, reconnect, disconnect } = useSyncConnection();
 
   const deleteTask = useCallback(
     (taskId: BSON.ObjectId) => {
@@ -60,10 +57,6 @@ function TaskScreen(): JSX.Element {
 
   return (
     <View style={{ flex: 1, paddingTop: 20, backgroundColor: "#fff" }}>
-      <OfflineModeButton
-        isConnected={isConnected}
-        toggleOfflineMode={isConnected ? disconnect : reconnect}
-      />
       <View
         style={{
           marginHorizontal: 20,
@@ -165,4 +158,4 @@ function TaskScreen(): JSX.Element {
   );
 }
 
-export default TaskScreen;
+export default TaskScreens;
